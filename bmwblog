@@ -1,0 +1,673 @@
+ var host = window.location.hostname;
+        var element = document.createElement("script");
+        var firstScript = document.getElementsByTagName("script")[0];
+        var url = "https://cmp.quantcast.com".concat(
+            "/choice/",
+            "7cAWW_17TtN4Q",
+            "/",
+            host,
+            "/choice.js?tag_version=V2"
+        );
+        var uspTries = 0;
+        var uspTriesLimit = 3;
+        element.async = true;
+        element.type = "text/javascript";
+        element.src = url;
+    
+        firstScript.parentNode.insertBefore(element, firstScript);
+    
+        function makeStub() {
+            var TCF_LOCATOR_NAME = "__tcfapiLocator";
+            var queue = [];
+            var win = window;
+            var cmpFrame;
+    
+            function addFrame() {
+            var doc = win.document;
+            var otherCMP = !!win.frames[TCF_LOCATOR_NAME];
+    
+            if (!otherCMP) {
+                if (doc.body) {
+                var iframe = doc.createElement("iframe");
+    
+                iframe.style.cssText = "display:none";
+                iframe.name = TCF_LOCATOR_NAME;
+                doc.body.appendChild(iframe);
+                } else {
+                setTimeout(addFrame, 5);
+                }
+            }
+            return !otherCMP;
+            }
+    
+            function tcfAPIHandler() {
+            var gdprApplies;
+            var args = arguments;
+    
+            if (!args.length) {
+                return queue;
+            } else if (args[0] === "setGdprApplies") {
+                if (
+                args.length > 3 &&
+                args[2] === 2 &&
+                typeof args[3] === "boolean"
+                ) {
+                gdprApplies = args[3];
+                if (typeof args[2] === "function") {
+                    args[2]("set", true);
+                }
+                }
+            } else if (args[0] === "ping") {
+                var retr = {
+                gdprApplies: gdprApplies,
+                cmpLoaded: false,
+                cmpStatus: "stub",
+                };
+    
+                if (typeof args[2] === "function") {
+                args[2](retr);
+                }
+            } else {
+                if (args[0] === "init" && typeof args[3] === "object") {
+                args[3] = Object.assign(args[3], { tag_version: "V2" });
+                }
+                queue.push(args);
+            }
+            }
+    
+            function postMessageEventHandler(event) {
+            var msgIsString = typeof event.data === "string";
+            var json = {};
+    
+            try {
+                if (msgIsString) {
+                json = JSON.parse(event.data);
+                } else {
+                json = event.data;
+                }
+            } catch (ignore) {}
+    
+            var payload = json.__tcfapiCall;
+    
+            if (payload) {
+                window.__tcfapi(
+                payload.command,
+                payload.version,
+                function (retValue, success) {
+                    var returnMsg = {
+                    __tcfapiReturn: {
+                        returnValue: retValue,
+                        success: success,
+                        callId: payload.callId,
+                    },
+                    };
+                    if (msgIsString) {
+                    returnMsg = JSON.stringify(returnMsg);
+                    }
+                    if (event && event.source && event.source.postMessage) {
+                    event.source.postMessage(returnMsg, "*");
+                    }
+                },
+                payload.parameter
+                );
+            }
+            }
+    
+            while (win) {
+            try {
+                if (win.frames[TCF_LOCATOR_NAME]) {
+                cmpFrame = win;
+                break;
+                }
+            } catch (ignore) {}
+    
+            if (win === window.top) {
+                break;
+            }
+            win = win.parent;
+            }
+            if (!cmpFrame) {
+            addFrame();
+            win.__tcfapi = tcfAPIHandler;
+            win.addEventListener("message", postMessageEventHandler, false);
+            }
+        }
+    
+        makeStub();
+    
+        var uspStubFunction = function () {
+            var arg = arguments;
+            if (typeof window.__uspapi !== uspStubFunction) {
+            setTimeout(function () {
+                if (typeof window.__uspapi !== "undefined") {
+                window.__uspapi.apply(window.__uspapi, arg);
+                }
+            }, 500);
+            }
+        };
+    
+        var checkIfUspIsReady = function () {
+            uspTries++;
+            if (window.__uspapi === uspStubFunction && uspTries < uspTriesLimit) {
+            console.warn("USP is not accessible");
+            } else {
+            clearInterval(uspInterval);
+            }
+        };
+    
+        if (typeof window.__uspapi === "undefined") {
+            window.__uspapi = uspStubFunction;
+            var uspInterval = setInterval(checkIfUspIsReady, 6000);
+        }
+        })();</script>  <script
+        async
+        src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"
+    ></script> <script async>!(function (a9, a, p, s, t, A, g) {
+        if (a[a9]) return;
+        function q(c, r) {
+            a[a9]._Q.push([c, r]);
+        }
+        a[a9] = {
+            init: function () {
+            q("i", arguments);
+            },
+            fetchBids: function () {
+            q("f", arguments);
+            },
+            setDisplayBids: function () {},
+            targetingKeys: function () {
+            return [];
+            },
+            _Q: [],
+        };
+        A = p.createElement(s);
+        A.async = !0;
+        A.src = t;
+        g = p.getElementsByTagName(s)[0];
+        g.parentNode.insertBefore(A, g);
+        })(
+        "apstag",
+        window,
+        document,
+        "script",
+        "//c.amazon-adsystem.com/aax2/apstag.js"
+        );
+        //initialize the apstag.js library on the page to allow bidding
+    
+        window.apstagInitialized = false;
+        window.__uspapi("getUSPData", 1, function (uspData, success) {
+        //console.log('cmp responded:', uspData, success);
+        if (success) {
+            window.CCPAString = uspData.uspString;
+        } else {
+            window.CCPAString = "1---";
+        }
+    
+        window.apstagInitialized = true;
+        apstag.init({
+            pubID: "eadde7c2-d371-4577-ae82-43473c334d4e", //enter your pub ID here as shown above, it must within quotes
+            adServer: "googletag",
+            simplerGPT: true,
+            videoAdServer: "DFP",
+            bidTimeout: 3000,
+            gdpr: {
+            cmpTimeout: 1000,
+            },
+            params: {
+            us_privacy: window.CCPAString, // refer privacy string components under IAB’s U.S. Privacy String
+            },
+        });
+    
+        //alert("the CCPA String for now is: " + window.CCPAString);
+    
+        //if (window.CCPAString == "1---"){
+        //  //alert("now I'll show the popup by myself. If I'm outside CA, quantcast will hide it by itself");
+        //    __uspapi("displayUspUi");
+        //}
+        });</script> <script>window.googletag = window.googletag || { cmd: [] };
+        window.bmwblogAdSlots = window.bmwblogAdSlots || [];
+        window.bmwblogSkippedAdSlots = window.bmwblogSkippedAdSlots || [];
+        window.bmwblogAllFetch = window.bmwblogAllFetch || false;
+        window.bmwblogAllRender = window.bmwblogAllRender || false;
+        window.eventAllFetch = new Event("allFetch");
+        window.consentChanged = new Event("consentChanged");
+        window.isGDPRNeeded = true;
+        window.deviceInfoConsentGiven = false;
+        window.personalizedAdsConsentGiven = false;
+    
+        window.isElementInViewport = function (el) {
+        if (typeof jQuery === "function" && el instanceof jQuery) {
+            el = el[0];
+        }
+    
+        var rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <=
+            (window.innerHeight ||
+                document.documentElement.clientHeight) /* or $(window).height() */ &&
+            rect.right <=
+            (window.innerWidth ||
+                document.documentElement.clientWidth) /* or $(window).width() */
+        );
+        };
+    
+        googletag.cmd.push(function () {
+        var homeLeaderboardMapping = googletag
+            .sizeMapping()
+            .addSize(
+            [992, 0],
+            [
+                [970, 250],
+                [970, 90],
+                [728, 90],
+                [300, 250],
+                [1, 1],
+            ]
+            ) //desktop
+            .addSize(
+            [768, 0],
+            [
+                [300, 250],
+                [728, 90],
+                [468, 60],
+                [1, 1],
+            ]
+            ) //tablet
+            .addSize(
+            [0, 0],
+            [
+                [320, 50],
+                [320, 100],
+                [300, 250],
+                [300, 50],
+                [1, 1],
+            ]
+            ) //mobile
+            .build();
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/728x90TopBanner",
+                [
+                [970, 250],
+                [970, 90],
+                [728, 90],
+                [468, 60],
+                [320, 50],
+                [320, 100],
+                [300, 250],
+                [300, 50],
+                [1, 1],
+                ],
+                "div-gpt-ad-1428786085190-0"
+            )
+            .defineSizeMapping(homeLeaderboardMapping)
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1428786085190-0",
+            adPath: "/1022709/728x90TopBanner",
+            sizes: [
+            [970, 250],
+            [970, 90],
+            [728, 90],
+            [468, 60],
+            [320, 50],
+            [320, 100],
+            [300, 250],
+            [300, 50],
+            [1, 1],
+            ],
+        });
+    
+        var articleTopMapping = googletag
+            .sizeMapping()
+            .addSize(
+            [992, 0],
+            [
+                [728, 90],
+            ]
+            ) //desktop
+            .addSize(
+            [768, 0],
+            [
+                [728, 90],
+                [468, 60],
+                [320, 50],
+                [300, 50],
+            ]
+            ) //tablet
+            .addSize(
+            [0, 0],
+            [
+                [320, 50],
+                [300, 50],
+            ]
+            ) //mobile
+            .build();
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/300x250_mobile_inside_articles",
+                [
+                [728, 90],
+                [468, 60],
+                [320, 50],
+                [300, 50],
+                ],
+                "div-gpt-ad-1459203340049-0"
+            )
+            .defineSizeMapping(articleTopMapping)
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1459203340049-0",
+            adPath: "/1022709/300x250_mobile_inside_articles",
+            sizes: [
+            [728, 90],
+            [468, 60],
+            [320, 50],
+            [300, 50],
+            ],
+        });
+    
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_300x250_desktop_sidebar_pos_3",
+                [300, 250],
+                "div-gpt-ad-1591509957705-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1591509957705-0",
+            adPath: "/1022709/bmwblog_300x250_desktop_sidebar_pos_3",
+            sizes: [[300, 250]],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_300x250_between_text_pos_3",
+                [300, 250],
+                "div-gpt-ad-1582961638473-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1582961638473-0",
+            adPath: "/1022709/bmwblog_300x250_between_text_pos_3",
+            sizes: [[300, 250]],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_300x250_between_text_pos4",
+                [300, 250],
+                "div-gpt-ad-1582962159743-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1582962159743-0",
+            adPath: "/1022709/bmwblog_300x250_between_text_pos4",
+            sizes: [[300, 250]],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_300x250_between_text_pos5",
+                [300, 250],
+                "div-gpt-ad-1637549905553-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1637549905553-0",
+            adPath: "/1022709/bmwblog_300x250_between_text_pos5",
+            sizes: [[300, 250]],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_300x250_between_text_pos6",
+                [300, 250],
+                "div-gpt-ad-1637551436293-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1637551436293-0",
+            adPath: "/1022709/bmwblog_300x250_between_text_pos6",
+            sizes: [[300, 250]],
+        });
+        var leaderboardAfterPostMapping = googletag
+            .sizeMapping()
+            .addSize(
+            [992, 0],
+            [
+                [970, 250],
+                [970, 90],
+                [728, 90],
+                [336, 280],
+                [300, 250],
+                [300, 100],
+                [1, 1],
+            ]
+            ) //desktop
+            .addSize(
+            [768, 0],
+            [
+                [300, 250],
+                [728, 90],
+                [468, 60],
+                [336, 280],
+                [1, 1],
+            ]
+            ) //tablet
+            .addSize(
+            [0, 0],
+            [
+                [320, 50],
+                [320, 100],
+                [300, 100],
+                [300, 250],
+                [300, 50],
+                [1, 1],
+            ]
+            ) //mobile
+            .build();
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_728x90_leaderboard_position_after_post",
+                [
+                [970, 250],
+                [970, 90],
+                [728, 90],
+                [468, 60],
+                [320, 50],
+                [320, 100],
+                [336, 280],
+                [300, 250],
+                [300, 50],
+                [1, 1],
+                ],
+                "div-gpt-ad-1591764418708-0"
+            )
+            .defineSizeMapping(leaderboardAfterPostMapping)
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1591764418708-0",
+            adPath: "/1022709/bmwblog_728x90_leaderboard_position_after_post",
+            sizes: [
+            [970, 250],
+            [970, 90],
+            [728, 90],
+            [468, 60],
+            [320, 50],
+            [320, 100],
+            [336, 280],
+            [300, 250],
+            [300, 50],
+            [1, 1],
+            ],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_300x250_atf_articles_page",
+                [300, 250],
+                "div-gpt-ad-1591569712835-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1591569712835-0",
+            adPath: "/1022709/bmwblog_300x250_atf_articles_page",
+            sizes: [[300, 250]],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/300x250_mobile_within_articles",
+                [300, 250],
+                "div-gpt-ad-1501633740535-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1501633740535-0",
+            adPath: "/1022709/300x250_mobile_within_articles",
+            sizes: [[300, 250]],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_mobile_300x250_between_text",
+                [300, 250],
+                "div-gpt-ad-1582935103230-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1582935103230-0",
+            adPath: "/1022709/bmwblog_mobile_300x250_between_text",
+            sizes: [[300, 250]],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/300x600_in_content",
+                [
+                    [300, 600],
+                    [120, 240],
+                    [120, 600],
+                    [160, 600],
+                    [240, 400],
+                    [300, 50],
+                    [300, 100],
+                    [300, 250],
+                ],
+                "div-gpt-ad-1573257365268-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1573257365268-0",
+            adPath: "/1022709/300x600_in_content",
+            sizes: [
+                [300, 600],
+                [120, 240],
+                [120, 600],
+                [160, 600],
+                [240, 400],
+                [300, 50],
+                [300, 100],
+                [300, 250],
+            ],
+        });
+        /* bmwblogAdSlots.push({
+            slot: (googletag.defineSlot('/1022709/bmwblog_300x600_after_content', [300, 600], 'div-gpt-ad-1591569464021-0').addService(googletag.pubads())),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1591569464021-0",
+            adPath: '/1022709/bmwblog_300x600_after_content',
+            sizes: [[300, 600]]
+            }); */
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_300x250_between_text_pos_1",
+                [300, 250],
+                "div-gpt-ad-1582961119773-0"
+            )
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1582961119773-0",
+            adPath: "/1022709/bmwblog_300x250_between_text_pos_1",
+            sizes: [[300, 250]],
+        });
+    
+        var leaderboardMobileAtf = googletag
+            .sizeMapping()
+            .addSize(
+            [1025, 0],
+            [
+                [728, 90],
+                [468, 60],
+                [320, 50],
+                [300, 50],
+            ]
+            ) //desktop
+            .addSize(
+            [768, 0],
+            [
+                [468, 60],
+                [320, 50],
+                [300, 50],
+            ]
+            ) //tablet
+            .addSize(
+            [0, 0],
+            [
+                [300, 50],
+                [320, 50],
+            ]
+            ) //mobile
+            .build();
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/bmwblog_leaderboard_mobile_atf",
+                [
+                [728, 90],
+                [468, 60],
+                [320, 50],
+                [300, 50],
+                ],
+                "div-gpt-ad-1592373497784-0"
+            )
+            .defineSizeMapping(leaderboardMobileAtf)
+            .addService(googletag.pubads()),
+            didFetch: false,
+            didRender: false,
+            divId: "div-gpt-ad-1592373497784-0",
+            adPath: "/1022709/bmwblog_leaderboard_mobile_atf",
+            sizes: [
+            [728, 90],
+            [468, 60],
+            [320, 50],
+            [300, 50],
+            [1, 1],
+            ],
+        });
+        bmwblogAdSlots.push({
+            slot: googletag
+            .defineSlot(
+                "/1022709/Leaderboard_mobile_inside_article",
+                [
